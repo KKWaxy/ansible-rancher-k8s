@@ -1,0 +1,39 @@
+---
+- name: Reset all rancher-k8s installations.
+  include_tasks: reset_all.yml
+  when: rancher_reset_before 
+
+- name: Deploy all rancher-k8s standalone controlle plane.
+  become: true
+  block:
+    - name: "Deploy standalone local k8s rancher cluster."
+      docker_container:
+        name: rancher-manager
+        state: started
+        image: rancher/rancher:v2.6-head
+        detach: yes
+        restart_policy: unless-stopped
+        privileged: yes
+        ports:
+        - 80:80
+        - 443:443
+      register: rancher_installed
+
+    - name: "Get GUI Admin User Generated Password."
+      block:
+        # - name: Wait for ports 80 and 443 to become open on the host.
+        #   wait_for:
+        #     timeout: 300
+        #   delegate_to: localhost
+
+        - name: Get Generated admin Password.
+          shell: docker logs {{rancher_installed['container']['Config']['Hostname']}}  2>&1 | grep "Bootstrap Password:" | awk '{print $6}' > /home/{{ansible_user}}/ui_admin_password.txt
+
+        - name: Download the dashboard_admin_password.txt file.
+          fetch:
+            src: /home/{{ansible_user}}/ui_admin_password.txt
+            dest: ./outputs/{{inventory_hostname}}/
+            flat: yes
+
+      when: rancher_installed['changed']
+  when: inventory_hostname is search("local")

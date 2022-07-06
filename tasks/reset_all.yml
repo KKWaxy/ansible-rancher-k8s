@@ -1,0 +1,8 @@
+---
+- name: Remove local standalone rancher k8s cluster."
+  become: true
+  docker_container:
+    name: rancher-manager
+    state: absent
+  when: inventory_hostname is search("local")
+  

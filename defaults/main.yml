@@ -1,0 +1,3 @@
+---
+# defaults file for rancher-k8s
+rancher_reset_before: true

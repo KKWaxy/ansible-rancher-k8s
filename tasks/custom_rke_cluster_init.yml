@@ -1,0 +1,20 @@
+- name: Create rke user with passwordless sudo.
+  become: true
+  block:
+    - name: Add rke user
+      user: 
+        name: rke
+        shell: /bin/bash
+
+    - name: Create rke sudo file.
+      file:
+        path: /etc/sudoers.d/rke
+        state: touch
+
+    - name: Give rke user passwordless sudo.
+      lineinfile:
+        state: present
+        path: /etc/sudoers.d/rke
+        line: 'rke ALL=(ALL:ALL) NOPASSWD: ALL'
+    
+    -  name: Set 
