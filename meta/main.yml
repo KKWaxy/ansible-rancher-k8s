@@ -1,6 +1,7 @@
 galaxy_info:
   author: Wilfried KOUASSI
-  role_name: ansible_rancher
+  role_name: rancher_role
+  namespace: zeflex
   description: This role aims to provide a simple amd light way of deploying rancher on GNU/Linux
   company: zeflex
 

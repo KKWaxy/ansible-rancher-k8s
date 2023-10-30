@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
-  remote_user: root
-  roles:
-    - rancher-k8s
+# - hosts: localhost
+#   remote_user: root
+#   roles:
+#     - rancher-k8s
